@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashish Vasava — Full-Stack Developer & Solution Architect</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>AV</text></svg>">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Bebas+Neue&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+
+
+    <style>
+        /* Custom Styles for Cinematic Feel */
+        body {
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .font-bebas { font-family: 'Bebas Neue', cursive; }
+        .font-montserrat { font-family: 'Montserrat', sans-serif; }
+
+        .hero-bg {
+            background: linear-gradient(rgba(10, 10, 10, 0.7), rgba(10, 10, 10, 0.9)), url('https://images.unsplash.com/photo-1605379399642-870262d3d051?q=80&w=2106&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center/cover;
+            will-change: transform;
+        }
+        
+        #main-nav {
+            transition: top 0.3s ease-in-out, background-color 0.3s ease-in-out;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #4f46e5, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        
+        .highlight-card {
+             background: radial-gradient(circle at 100% 0, rgba(168, 85, 247, 0.05), transparent 30%);
+             border: 1px solid rgba(255, 255, 255, 0.1);
+             transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-8px);
+            background: radial-gradient(circle at 100% 0, rgba(168, 85, 247, 0.1), transparent 40%);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .skill-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+        
+        .project-card {
+            transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: perspective(1000px) rotateY(5deg) rotateX(5deg) scale(1.05);
+        }
+        
+        .timeline-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .timeline-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .form-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #a855f7;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+        }
+        
+        .modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .tech-tag {
+            background-color: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #c084fc;
+        }
+
+        /* Initial animation states */
+        .reveal-up { transform: translateY(50px); opacity: 0; }
+
+    </style>
+</head>
+<body class="antialiased">
+    
+    <!-- Header / Nav -->
+    <header id="main-nav" class="fixed top-[-100px] left-0 w-full z-40 bg-black/30 backdrop-blur-lg">
+        <div class="container mx-auto px-6 md:px-12 py-4 flex justify-between items-center">
+            <a href="#hero" class="font-bebas text-2xl tracking-widest gradient-text">Ashish Vasava</a>
+            <nav class="hidden md:flex space-x-8 font-montserrat text-sm">
+                <a href="#about" class="hover:text-purple-400 transition-colors">About</a>
+                <a href="#skills" class="hover:text-purple-400 transition-colors">Skills</a>
+                <a href="#projects" class="hover:text-purple-400 transition-colors">Projects</a>
+                <a href="#contact" class="hover:text-purple-400 transition-colors">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="h-screen w-screen flex flex-col justify-center items-center relative overflow-hidden">
+        <div class="hero-bg absolute inset-0 z-0"></div>
+        <div class="absolute inset-0 bg-black/60 z-0"></div>
+        <div class="text-center z-10 p-4">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bebas tracking-wider leading-tight">
+                <span id="hero-line-1" class="block"></span>
+                <span id="hero-line-2" class="block text-purple-400"></span>
+                <span id="hero-line-3" class="block"></span>
+            </h1>
+        </div>
+        <div class="scroll-indicator absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
+            <a href="#about" class="block w-6 h-10 border-2 border-white rounded-full">
+                <span class="block w-1 h-2 bg-white rounded-full mx-auto mt-2 animate-pulse"></span>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 md:py-32 relative overflow-hidden">
+        <div class="absolute inset-0 bg-black/20 backdrop-blur-sm z-0" style="background: radial-gradient(circle at 20% 20%, rgba(79, 70, 229, 0.1), transparent 40%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1), transparent 40%);"></div>
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
+                <div class="md:col-span-1 reveal-up">
+                    <img id="about-img" src="Ashish1.jpg" alt="Ashish Vasava" class="rounded-full shadow-2xl shadow-purple-500/20 w-48 h-48 md:w-64 md:h-64 mx-auto object-cover border-4 border-purple-900/50">
+                </div>
+                <div class="md:col-span-2 text-center md:text-left reveal-up">
+                    <h2 class="text-4xl md:text-5xl font-bebas gradient-text mb-4">A Passion for Building & Problem Solving</h2>
+                    <p class="font-montserrat text-lg md:text-xl text-gray-300 mb-6">
+                        I'm a Full-Stack Developer specializing in the MERN stack. My passion lies in crafting elegant, high-performance web applications that provide real-world value and a seamless user experience, from a stock trading platform like Zerodha to the Wanderlust travel app.
+                    </p>
+                    <p class="font-light text-gray-400 mb-8">
+                        Beyond my core development work, my curiosity drives me to explore the rapidly evolving world of Large Language Models (LLMs) and the principles of great UI/UX design. When I'm not coding, you can find me strategizing in a game of chess or watching documentaries on the future of tech—always learning and staying inspired.
+                    </p>
+                    <div class="flex justify-center md:justify-start">
+                        <a href="ASHISHRSUME.pdf" download="ASHISHRSUME.pdf" class="font-bebas text-xl tracking-widest px-8 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50">
+                            Download Resume
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Highlights Section -->
+    <section id="highlights" class="py-20 md:py-32 bg-[#101010]">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl md:text-6xl font-bebas tracking-wide reveal-up">Career Highlights</h2>
+                 <p class="text-lg text-gray-400 mt-2 font-montserrat reveal-up">A snapshot of my key achievements.</p>
+            </div>
+            <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="highlight-card reveal-up p-8 rounded-lg">
+                    <h3 class="font-bebas text-2xl gradient-text mb-3">Full-Stack Project Deployment</h3>
+                    <p class="font-montserrat text-gray-400">Successfully built and deployed two complete MERN stack applications, Zerodha Clone and Wanderlust, demonstrating end-to-end development capabilities.</p>
+                </div>
+                <div class="highlight-card reveal-up p-8 rounded-lg">
+                    <h3 class="font-bebas text-2xl gradient-text mb-3">Professional Internship Experience</h3>
+                    <p class="font-montserrat text-gray-400">Contributed to a live Progressive Web App (PWA) during my frontend internship at Shiksha Finder, gaining hands-on industry experience.</p>
+                </div>
+                <div class="highlight-card reveal-up p-8 rounded-lg">
+                     <h3 class="font-bebas text-2xl gradient-text mb-3">UI/UX & Creative Development</h3>
+                    <p class="font-montserrat text-gray-400">Designed and developed this cinematic portfolio from scratch, showcasing a strong eye for user experience and modern web aesthetics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills & Tech Section -->
+    <section id="skills" class="py-20 md:py-32">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl md:text-6xl font-bebas tracking-wide reveal-up">My Tech Stack</h2>
+                <p class="text-lg text-gray-400 mt-2 font-montserrat reveal-up">Tools and technologies I use to bring ideas to life.</p>
+            </div>
+            <div class="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-8">
+                <!-- Skill Icons -->
+                <div class="skill-card reveal-up p-6 rounded-lg flex flex-col items-center justify-center text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.9-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.89 1.52 2.34 1.08 2.91.83c.09-.65.35-1.08.63-1.34c-2.22-.25-4.55-1.11-4.55-4.94c0-1.09.39-1.98 1.03-2.68c-.1-.25-.45-1.27.1-2.64c0 0 .84-.27 2.75 1.02c.8-.22 1.65-.33 2.5-.33c.85 0 1.7.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.37.2 2.39.1 2.64c.64.7 1.03 1.59 1.03 2.68c0 3.84-2.34 4.68-4.57 4.93c.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 22 12A10 10 0 0 0 12 2z"></path></svg>
+                    <span class="font-montserrat font-semibold">React</span>
+                </div>
+                <div class="skill-card reveal-up p-6 rounded-lg flex flex-col items-center justify-center text-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    <span class="font-montserrat font-semibold">Node.js</span>
+                </div>
+                 <div class="skill-card reveal-up p-6 rounded-lg flex flex-col items-center justify-center text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.9-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.89 1.52 2.34 1.08 2.91.83c.09-.65.35-1.08.63-1.34c-2.22-.25-4.55-1.11-4.55-4.94c0-1.09.39-1.98 1.03-2.68c-.1-.25-.45-1.27.1-2.64c0 0 .84-.27 2.75 1.02A9.92 9.92 0 0 1 12 4.5c.85 0 1.7.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.37.2 2.39.1 2.64c.64.7 1.03 1.59 1.03 2.68c0 3.84-2.34 4.68-4.57 4.93c.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 22 12A10 10 0 0 0 12 2z"></path></svg>
+                    <span class="font-montserrat font-semibold">MongoDB</span>
+                </div>
+                <div class="skill-card reveal-up p-6 rounded-lg flex flex-col items-center justify-center text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.9-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.89 1.52 2.34 1.08 2.91.83c.09-.65.35-1.08.63-1.34c-2.22-.25-4.55-1.11-4.55-4.94c0-1.09.39-1.98 1.03-2.68c-.1-.25-.45-1.27.1-2.64c0 0 .84-.27 2.75 1.02A9.92 9.92 0 0 1 12 4.5c.85 0 1.7.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.37.2 2.39.1 2.64c.64.7 1.03 1.59 1.03 2.68c0 3.84-2.34 4.68-4.57 4.93c.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 22 12A10 10 0 0 0 12 2z"></path></svg>
+                    <span class="font-montserrat font-semibold">JavaScript</span>
+                </div>
+                <div class="skill-card reveal-up p-6 rounded-lg flex flex-col items-center justify-center text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.9-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.89 1.52 2.34 1.08 2.91.83c.09-.65.35-1.08.63-1.34c-2.22-.25-4.55-1.11-4.55-4.94c0-1.09.39-1.98 1.03-2.68c-.1-.25-.45-1.27.1-2.64c0 0 .84-.27 2.75 1.02A9.92 9.92 0 0 1 12 4.5c.85 0 1.7.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.37.2 2.39.1 2.64c.64.7 1.03 1.59 1.03 2.68c0 3.84-2.34 4.68-4.57 4.93c.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 22 12A10 10 0 0 0 12 2z"></path></svg>
+                    <span class="font-montserrat font-semibold">Java</span>
+                </div>
+                <div class="skill-card reveal-up p-6 rounded-lg flex flex-col items-center justify-center text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
+                    <span class="font-montserrat font-semibold">HTML</span>
+                </div>
+                <div class="skill-card reveal-up p-6 rounded-lg flex flex-col items-center justify-center text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
+                    <span class="font-montserrat font-semibold">CSS</span>
+                </div>
+                <div class="skill-card reveal-up p-6 rounded-lg flex flex-col items-center justify-center text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.9-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.89 1.52 2.34 1.08 2.91.83c.09-.65.35-1.08.63-1.34c-2.22-.25-4.55-1.11-4.55-4.94c0-1.09.39-1.98 1.03-2.68c-.1-.25-.45-1.27.1-2.64c0 0 .84-.27 2.75 1.02A9.92 9.92 0 0 1 12 4.5c.85 0 1.7.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.37.2 2.39.1 2.64c.64.7 1.03 1.59 1.03 2.68c0 3.84-2.34 4.68-4.57 4.93c.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 22 12A10 10 0 0 0 12 2z"></path></svg>
+                    <span class="font-montserrat font-semibold">Git</span>
+                </div>
+                 <div class="skill-card reveal-up p-6 rounded-lg flex flex-col items-center justify-center text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.9-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.89 1.52 2.34 1.08 2.91.83c.09-.65.35-1.08.63-1.34c-2.22-.25-4.55-1.11-4.55-4.94c0-1.09.39-1.98 1.03-2.68c-.1-.25-.45-1.27.1-2.64c0 0 .84-.27 2.75 1.02A9.92 9.92 0 0 1 12 4.5c.85 0 1.7.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.37.2 2.39.1 2.64c.64.7 1.03 1.59 1.03 2.68c0 3.84-2.34 4.68-4.57 4.93c.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 22 12A10 10 0 0 0 12 2z"></path></svg>
+                    <span class="font-montserrat font-semibold">GitHub</span>
+                </div>
+                <div class="skill-card reveal-up p-6 rounded-lg flex flex-col items-center justify-center text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.9-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.89 1.52 2.34 1.08 2.91.83c.09-.65.35-1.08.63-1.34c-2.22-.25-4.55-1.11-4.55-4.94c0-1.09.39-1.98 1.03-2.68c-.1-.25-.45-1.27.1-2.64c0 0 .84-.27 2.75 1.02A9.92 9.92 0 0 1 12 4.5c.85 0 1.7.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.37.2 2.39.1 2.64c.64.7 1.03 1.59 1.03 2.68c0 3.84-2.34 4.68-4.57 4.93c.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 22 12A10 10 0 0 0 12 2z"></path></svg>
+                    <span class="font-montserrat font-semibold">Express.js</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 md:py-32 bg-[#101010]">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl md:text-6xl font-bebas tracking-wide reveal-up">My Projects</h2>
+                <p class="text-lg text-gray-400 mt-2 font-montserrat reveal-up">Click a card to see the details.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+                <!-- Project Card 1: Zerodha Clone -->
+                <div class="project-card reveal-up" 
+                    data-project-title="Zerodha Clone"
+                    data-project-desc="Stock trading platform built with MERN stack featuring secure login and buy, sell features."
+                    data-project-img="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2070&auto=format&fit=crop&ixlib-rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    data-project-url="https://zerodhaclonefrontend-t4pc.onrender.com"
+                    data-project-tech="React,Node.js,Express,MongoDB">
+                    <div class="bg-gray-900/50 rounded-lg overflow-hidden shadow-lg shadow-black/50 aspect-[4/3] p-6 flex flex-col justify-end relative group">
+                         <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2070&auto=format&fit=crop&ixlib-rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-40 group-hover:opacity-60" alt="Zerodha Clone">
+                         <div class="relative z-10">
+                            <h3 class="text-2xl font-bebas tracking-wider">Zerodha Clone</h3>
+                            <p class="text-sm text-gray-400 font-montserrat">Full-Stack Stock Trading Platform</p>
+                         </div>
+                    </div>
+                </div>
+                <!-- Project Card 2: Wanderlust -->
+                <div class="project-card reveal-up"
+                    data-project-title="Wanderlust"
+                    data-project-desc="Travel booking platform with dynamic property listings, deletion, update, review, and image uploads."
+                    data-project-img="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop&ixlib-rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    data-project-url="https://wanderlust-ckh2.onrender.com"
+                    data-project-tech="Node.js,Express,MongoDB,EJS,Cloudinary">
+                    <div class="bg-gray-900/50 rounded-lg overflow-hidden shadow-lg shadow-black/50 aspect-[4/3] p-6 flex flex-col justify-end relative group">
+                         <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop&ixlib-rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-40 group-hover:opacity-60" alt="Wanderlust">
+                         <div class="relative z-10">
+                            <h3 class="text-2xl font-bebas tracking-wider">Wanderlust</h3>
+                            <p class="text-sm text-gray-400 font-montserrat">Travel Booking Platform</p>
+                         </div>
+                    </div>
+                </div>
+                <!-- Project Card 3: Dromo -->
+                <div class="project-card reveal-up"
+                    data-project-title="Dromo"
+                    data-project-desc="Currently under active development, Dromo is a visionary SaaS platform being architected to solve complex, real-world challenges in the logistics and supply chain industry."
+                    data-project-img="https://www.xdc.dev/images/Gzn_dGVq1LFLp_7s2CEP-e1jBOqgKD7pCKj3qjjM9dM/s:1000:420/mb:500000/ar:1/aHR0cHM6Ly93d3cu/eGRjLmRldi91cGxv/YWRzL2FydGljbGVz/L3U3bGllbGJzdDM3/bjJsODNyaGdtLmpw/Zw"
+                    data-project-url="https://dromo-q2zg.onrender.com"
+                    data-project-tech="React.js,React-Natic, Node.js, Express, MongoDB, Google Maps API,JWT, Cloudinary,AI(Python)">
+                    <div class="bg-gray-900/50 rounded-lg overflow-hidden shadow-lg shadow-black/50 aspect-[4/3] p-6 flex flex-col justify-end relative group">
+                         <img src="https://www.xdc.dev/images/Gzn_dGVq1LFLp_7s2CEP-e1jBOqgKD7pCKj3qjjM9dM/s:1000:420/mb:500000/ar:1/aHR0cHM6Ly93d3cu/eGRjLmRldi91cGxv/YWRzL2FydGljbGVz/L3U3bGllbGJzdDM3/bjJsODNyaGdtLmpw/Zw" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-40 group-hover:opacity-60" alt="Dromo">
+                         <div class="relative z-10">
+                            <h3 class="text-2xl font-bebas tracking-wider">Dromo</h3>
+                            <p class="text-sm text-gray-400 font-montserrat">Smart Truckload Logistics Platform</p>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cinematic Timeline Section -->
+    <section id="timeline" class="pt-20 md:pt-32 pb-0 overflow-hidden">
+        <div class="container mx-auto">
+            <div class="text-center mb-16 px-6 md:px-12">
+                <h2 class="text-5xl md:text-6xl font-bebas tracking-wide reveal-up">My Journey</h2>
+                <p class="text-lg text-gray-400 mt-2 font-montserrat reveal-up">Key milestones on a mission-driven path.</p>
+            </div>
+        </div>
+        <div id="timeline-wrapper" class="relative h-[300px]">
+            <div id="timeline-reel" class="absolute top-0 left-0 flex items-center h-full">
+                <!-- Timeline Items -->
+                <div class="timeline-item flex-shrink-0 w-80 mx-8">
+                    <div class="bg-gray-900/30 p-6 rounded-lg border border-gray-800 backdrop-blur-sm">
+                        <p class="font-bebas text-2xl gradient-text">2022</p>
+                        <h3 class="font-montserrat font-bold text-xl mb-2">Began B.E. in IT</h3>
+                        <p class="text-gray-400 text-sm">Enrolled at L.D. College Of Engineering, diving deep into Information Technology.</p>
+                    </div>
+                </div>
+                 <div class="timeline-item flex-shrink-0 w-80 mx-8">
+                    <div class="bg-gray-900/30 p-6 rounded-lg border border-gray-800 backdrop-blur-sm">
+                        <p class="font-bebas text-2xl gradient-text">2023</p>
+                        <h3 class="font-montserrat font-bold text-xl mb-2">Programming</h3>
+                        <p class="text-gray-400 text-sm">Strengthened programming fundamentals, explored DSA, and built academic projects.</p>
+                    </div>
+                </div>
+                <div class="timeline-item flex-shrink-0 w-80 mx-8">
+                    <div class="bg-gray-900/30 p-6 rounded-lg border border-gray-800 backdrop-blur-sm">
+                        <p class="font-bebas text-2xl gradient-text">2024</p>
+                        <h3 class="font-montserrat font-bold text-xl mb-2">Development </h3>
+                        <p class="text-gray-400 text-sm">Focused on full-stack development, advanced MERN stack skills, and started planning major projects.</p>
+                    </div>
+                </div>
+                <div class="timeline-item flex-shrink-0 w-80 mx-8">
+                    <div class="bg-gray-900/30 p-6 rounded-lg border border-gray-800 backdrop-blur-sm">
+                        <p class="font-bebas text-2xl gradient-text">2025</p>
+                        <h3 class="font-montserrat font-bold text-xl mb-2">Frontend Internship</h3>
+                        <p class="text-gray-400 text-sm">Gained industry experience at Shiksha Finder, contributing to a real-world Progressive Web Application.</p>
+                    </div>
+                </div>
+                 <div class="timeline-item flex-shrink-0 w-80 mx-8">
+                    <div class="bg-gray-900/30 p-6 rounded-lg border border-gray-800 backdrop-blur-sm">
+                        <p class="font-bebas text-2xl gradient-text">Today</p>
+                        <h3 class="font-montserrat font-bold text-xl mb-2">Founder & Developer – Dromo</h3>
+                        <p class="text-gray-400 text-sm">Building an intelligent truckload logistics platform.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / CTA Section -->
+    <section id="contact" class="pt-16 md:pt-24 pb-20 md:pb-32 relative">
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-gray-900/80 to-transparent"></div>
+        <div class="container mx-auto px-6 md:px-12 text-center relative z-10">
+            <h2 id="contact-title" class="text-5xl md:text-7xl font-bebas mb-8">
+                Let’s Build Something Legendary
+            </h2>
+            <p class="max-w-2xl mx-auto text-lg text-gray-300 font-montserrat mb-12 reveal-up">
+                Have an idea or a challenge worth solving? I'm always open to connecting with passionate minds. Let's start a conversation.
+            </p>
+            <form action="mailto:ashish05060@gmail.com" method="post" enctype="text/plain" class="max-w-xl mx-auto space-y-6 reveal-up">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input type="text" name="name" placeholder="Your Name" class="form-input w-full p-4 rounded-lg border-2 transition">
+                    <input type="email" name="email" placeholder="Your Email" class="form-input w-full p-4 rounded-lg border-2 transition">
+                </div>
+                <textarea name="message" placeholder="Your Message" rows="5" class="form-input w-full p-4 rounded-lg border-2 transition"></textarea>
+                <button type="submit" class="font-bebas text-2xl tracking-widest px-12 py-4 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/50">
+                    Send Mission
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black/50 py-8">
+        <div class="container mx-auto px-6 md:px-12 text-center text-gray-400">
+            <div class="flex justify-center items-center space-x-8 mb-4">
+                <a href="https://github.com/ASHISH-VASAVA" target="_blank" rel="noopener noreferrer" class="hover:text-purple-400 transition-colors text-lg transform hover:scale-110">GitHub</a>
+                <a href="https://www.linkedin.com/in/ashish-3a772227a/" target="_blank" rel="noopener noreferrer" class="hover:text-purple-400 transition-colors text-lg transform hover:scale-110">LinkedIn</a>
+                <a href="mailto:ashish05060@gmail.com" class="hover:text-purple-400 transition-colors text-lg transform hover:scale-110">Email</a>
+            </div>
+            <p class="font-montserrat text-sm">&copy; 2025 Ashish Vasava. Built with passion and code.</p>
+        </div>
+    </footer>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="modal fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transform scale-95">
+        <div id="modal-content" class="bg-[#101010] rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl shadow-purple-500/20 transform transition-transform duration-300">
+            <button id="close-modal" class="absolute top-4 right-4 text-white text-3xl z-10 hover:text-purple-400 transition-colors">&times;</button>
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <img id="modal-img" src="" alt="" class="w-full h-64 md:h-full object-cover md:rounded-l-lg">
+                <div class="p-8 md:p-12 flex flex-col">
+                    <h2 id="modal-title" class="text-4xl font-bebas gradient-text mb-4"></h2>
+                    <p id="modal-desc" class="font-montserrat text-gray-300 mb-6 flex-grow"></p>
+                    <div class="mb-8">
+                        <h4 class="font-montserrat font-bold text-gray-200 mb-3">Tech Stack:</h4>
+                        <div id="modal-tech-stack" class="flex flex-wrap gap-2">
+                           <!-- Tech tags will be inserted here by JS -->
+                        </div>
+                    </div>
+                    <a id="modal-url" href="#" target="_blank" rel="noopener noreferrer" class="font-bebas text-xl tracking-widest px-8 py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold transition-all duration-300 transform hover:scale-105 text-center">
+                        View Live Project
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            gsap.registerPlugin(ScrollTrigger, TextPlugin);
+
+            // --- HERO ANIMATIONS ---
+            const heroTimeline = gsap.timeline({delay: 0.5});
+            heroTimeline
+                .to("#hero-line-1", { duration: 1.5, text: "I'm Ashish Vasava —", ease: "none" })
+                .to("#hero-line-2", { duration: 1.5, text: "Full-Stack Developer", ease: "none" }, "-=0.8")
+                .to("#hero-line-3", { duration: 1.5, text: "& Innovator", ease: "none" }, "-=0.8");
+
+            // Hero background parallax
+            gsap.to('.hero-bg', {
+                scale: 1.2,
+                scrollTrigger: {
+                    trigger: '#hero',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true,
+                }
+            });
+            
+            // --- STICKY NAV ---
+            const nav = document.getElementById('main-nav');
+            ScrollTrigger.create({
+                trigger: '#about',
+                start: 'top top',
+                onEnter: () => gsap.to(nav, { top: 0, duration: 0.3, ease: 'power2.out' }),
+                onLeaveBack: () => gsap.to(nav, { top: '-100px', duration: 0.3, ease: 'power2.in' }),
+            });
+
+
+            // --- GENERAL REVEAL ANIMATIONS ---
+            const revealElements = gsap.utils.toArray('.reveal-up');
+            revealElements.forEach((el, i) => {
+                gsap.fromTo(el, {
+                    y: 50,
+                    opacity: 0
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 85%',
+                        toggleActions: 'play none none reverse',
+                    },
+                    delay: el.classList.contains('skill-card') || el.classList.contains('highlight-card') ? i * 0.05 : 0
+                });
+            });
+
+            // --- ABOUT SECTION ANIMATIONS ---
+            gsap.fromTo('#about-img', {
+                scale: 0.8,
+            }, {
+                scale: 1,
+                scrollTrigger: {
+                    trigger: '#about',
+                    start: 'top 80%',
+                    end: 'bottom top',
+                    scrub: 1,
+                }
+            });
+
+            // --- CINEMATIC TIMELINE ANIMATION ---
+            const timelineReel = document.querySelector("#timeline-reel");
+            const timelineItems = gsap.utils.toArray(".timeline-item");
+            
+            let timelineWidth = 0;
+            timelineItems.forEach(item => {
+                timelineWidth += item.offsetWidth + (parseInt(getComputedStyle(item).marginLeft) * 2);
+            });
+
+            gsap.to(timelineReel, {
+                x: () => -(timelineWidth - window.innerWidth),
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#timeline-wrapper",
+                    pin: true,
+                    scrub: 1.5,
+                    start: "top top",
+                    end: () => `+=${timelineWidth}`,
+                    invalidateOnRefresh: true
+                }
+            });
+
+            timelineItems.forEach((item, index) => {
+                gsap.from(item, {
+                    opacity: 0,
+                    y: 100,
+                    scrollTrigger: {
+                        trigger: item,
+                        containerAnimation: gsap.getTweensOf(timelineReel)[0],
+                        start: "left 90%",
+                        toggleActions: "play none none reverse",
+                    }
+                });
+            });
+
+            // --- CONTACT TITLE ANIMATION ---
+            gsap.fromTo('#contact-title', 
+                { backgroundPosition: '200% 0' },
+                {
+                    backgroundPosition: '0% 0',
+                    scrollTrigger: {
+                        trigger: '#contact-title',
+                        start: 'top 80%',
+                        scrub: 1.5,
+                    },
+                    onStart: () => {
+                        document.querySelector('#contact-title').classList.add('gradient-text');
+                    }
+                }
+            );
+
+            // --- PROJECT MODAL LOGIC ---
+            const projectCards = document.querySelectorAll('.project-card');
+            const modal = document.getElementById('project-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+
+            const modalTitle = document.getElementById('modal-title');
+            const modalDesc = document.getElementById('modal-desc');
+            const modalImg = document.getElementById('modal-img');
+            const modalUrl = document.getElementById('modal-url');
+            const modalTechStack = document.getElementById('modal-tech-stack');
+
+            projectCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const title = card.dataset.projectTitle;
+                    const desc = card.dataset.projectDesc;
+                    const img = card.dataset.projectImg;
+                    const url = card.dataset.projectUrl;
+                    const tech = card.dataset.projectTech.split(',');
+
+                    modalTitle.textContent = title;
+                    modalDesc.textContent = desc;
+                    modalImg.src = img;
+                    modalImg.alt = title;
+                    
+                    modalTechStack.innerHTML = ''; // Clear previous tags
+                    tech.forEach(t => {
+                        const tag = document.createElement('span');
+                        tag.className = 'tech-tag px-3 py-1 text-sm rounded-full font-montserrat';
+                        tag.textContent = t.trim();
+                        modalTechStack.appendChild(tag);
+                    });
+                    
+                    if (url && url !== '#') {
+                        modalUrl.href = url;
+                        modalUrl.style.display = 'inline-block';
+                    } else {
+                        modalUrl.style.display = 'none';
+                    }
+
+                    modal.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            function closeModal() {
+                modal.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+                document.body.style.overflow = 'auto';
+            }
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            window.addEventListener('resize', () => {
+                ScrollTrigger.refresh();
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
